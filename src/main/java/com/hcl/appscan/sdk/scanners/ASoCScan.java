@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017, 2024. 
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -14,6 +14,7 @@ import com.hcl.appscan.sdk.logging.DefaultProgress;
 import com.hcl.appscan.sdk.logging.IProgress;
 import com.hcl.appscan.sdk.results.CloudResultsProvider;
 import com.hcl.appscan.sdk.results.IResultsProvider;
+import com.hcl.appscan.sdk.results.NonCompliantIssuesResultProvider;
 import com.hcl.appscan.sdk.scan.IScan;
 import com.hcl.appscan.sdk.scan.IScanServiceProvider;
 import com.hcl.appscan.sdk.utils.SystemUtil;
@@ -57,8 +58,19 @@ public abstract class ASoCScan implements IScan, ScanConstants, Serializable {
 		provider.setReportFormat(getReportFormat());
 		return provider;
 	}
-        
 
+	@Override
+	public IResultsProvider getResultsProvider(boolean nonCompliantIssues) {
+		if(nonCompliantIssues) {
+			IResultsProvider provider = new NonCompliantIssuesResultProvider(m_scanId, getType(), m_serviceProvider, m_progress);
+			provider.setReportFormat(getReportFormat());
+			return provider;
+		}
+		else {
+			return getResultsProvider();
+		}
+	}
+	
 	protected void setScanId(String id) {
 		m_scanId = id;
 	}
@@ -69,6 +81,10 @@ public abstract class ASoCScan implements IScan, ScanConstants, Serializable {
 	
 	protected String getTarget() {
 		return m_target;
+	}
+	
+	public void setTarget(String target) {
+		m_target = target;
 	}
 	
 	public IProgress getProgress() {
