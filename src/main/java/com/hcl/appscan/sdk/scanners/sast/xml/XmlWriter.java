@@ -43,10 +43,8 @@ implements	IModelXMLConstants
 		try {
 			initialize(directory);
 		} catch (TransformerConfigurationException e) {
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}
+} catch (ParserConfigurationException e) {
+}
 		m_config = new DOMWriter(directory, m_configFileName, m_builder);
 	}
 
