@@ -9,6 +9,7 @@ package com.hcl.appscan.sdk.scanners.sast.xml;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import javax.xml.XMLConstants;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -87,6 +88,7 @@ public abstract class ModelWriter {
 	 */
 	private void initTransformer() throws TransformerConfigurationException {
 		TransformerFactory factory = TransformerFactory.newInstance();
+		factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
 		configureTransformerFactory(factory);
 		m_transformer = factory.newTransformer();
 		configureTransformer();
@@ -97,6 +99,8 @@ public abstract class ModelWriter {
 	 */
 	private void initDocumentBuilder() throws ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
 		configureDocumentBuilderFactory(factory);
 		m_builder = factory.newDocumentBuilder();
 	}
